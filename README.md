@@ -29,7 +29,7 @@ Sebuah bot Telegram untuk memindai dan mendeteksi kode berbahaya dalam dokumen, 
    pip install -r requirements.txt
    ```
 
-4. Gantilah `'YOUR_BOT_TOKEN'` di `x.py` dengan token bot Telegram yang sesuai.
+4. Gantilah `'BOT_TOKEN_ANDA'` di `main.py` dengan token bot Telegram yang sesuai.
 
 5. Jalankan bot:
    ```bash
