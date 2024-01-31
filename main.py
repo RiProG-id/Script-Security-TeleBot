@@ -4,15 +4,23 @@ import re
 from telegram import Update
 from telegram.ext import Updater, MessageHandler, Filters, CallbackContext, CommandHandler
 
-TOKEN = 'YOUR_BOT_TOKEN'
+TOKEN = 'BOT_TOKEN_ANDA"'
 
 def start(update: Update, context: CallbackContext) -> None:
-    update.message.reply_text('Halo! Terima kasih sudah memulai bot ini. Source Code: [GitHub](https://github.com/RiProG-id/Script-Security-TeleBot)', disable_web_page_preview=True)
+    update.message.reply_text('Halo! Terima kasih sudah memulai bot ini. Source Code: https://github.com/RiProG-id/Script-Security-TeleBot)', disable_web_page_preview=True)
 
 def welcome(update: Update, context: CallbackContext) -> None:
     if update.message.new_chat_members:
-        for _ in update.message.new_chat_members:
-            update.message.reply_text('Halo! Terima kasih telah menambahkan saya ke grup. Source Code: [GitHub](https://github.com/RiProG-id/Script-Security-TeleBot)', disable_web_page_preview=True)
+        for new_member in update.message.new_chat_members:
+            if new_member.id == context.bot.id and not context.bot.get_chat_member(update.message.chat_id, context.bot.id).status == "administrator":
+                update.message.reply_text('Halo! Terima kasih telah menambahkan saya ke grup. Source Code: (https://github.com/RiProG-id/Script-Security-TeleBot)', disable_web_page_preview=True)
+                update.message.reply_text('⚠️ Maaf, saya belum diatur sebagai admin di grup ini. Mohon tambahkan saya sebagai admin agar pemindaian dapat berfungsi. Terima kasih! ⚙️')
+            else:
+                update.message.reply_text('Halo! Terima kasih telah menambahkan saya ke grup. Source Code: (https://github.com/RiProG-id/Script-Security-TeleBot)', disable_web_page_preview=True)
+
+def create_temp_folder():
+    if not os.path.exists('temp_folder'):
+        os.makedirs('temp_folder')
 
 def delete_temp_files():
     for file_name in os.listdir('temp_folder'):
@@ -43,13 +51,13 @@ def scan_sh(sh_content):
 
 def detect_dangerous_code(content):
     dangerous_patterns = [
-        r'\b(rm\s*-rf|if=/dev/null|cmd\s+erase|apparmor|setenforce|shred\s*-f|ufw\s+disable|iptables\s+-F|setfacl|:(){ :|:& };:)\b',
+        rb'\b(rm -rf|if=/dev/null|cmd erase|apparmor|setenforce|shred -f|ufw disable|iptables -F|setfacl|:(){ :|:& };:)\b',
     ]
 
     for pattern in dangerous_patterns:
-        match = re.search(pattern, content.decode('utf-8'))
+        match = re.search(pattern, content)
         if match:
-            return match.group()
+            return match.group().decode('utf-8')
 
     return None
     
@@ -58,13 +66,13 @@ def handle_document(update: Update, context: CallbackContext) -> None:
     file_id = document.file_id
     file = context.bot.get_file(file_id)
 
+    create_temp_folder()
+
     if document.file_size > 5 * 1024 * 1024:
-        update.message.reply_text('❌ File size exceeds the limit (5MB). Please try again with a smaller file.')
         return
 
     try:
-        file_path = os.path.join('temp_folder', document.file_name)
-        file.download(file_path)
+        file_path = file.download()
     except FileNotFoundError:
         update.message.reply_text('❌ File not found. Please try again.')
         return
@@ -97,7 +105,7 @@ def main() -> None:
     dp = updater.dispatcher
 
     dp.add_handler(CommandHandler("start", start))
-    dp.add_handler(MessageHandler(Filters.command, welcome))
+    dp.add_handler(MessageHandler(Filters.status_update.new_chat_members, welcome))
     dp.add_handler(MessageHandler(Filters.text & ~Filters.command, start))
     dp.add_handler(MessageHandler(Filters.document, handle_document))
 
