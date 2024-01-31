@@ -6,9 +6,13 @@ from telegram.ext import Updater, MessageHandler, Filters, CallbackContext, Comm
 
 TOKEN = 'YOUR_BOT_TOKEN'
 
-def create_temp_folder():
-    if not os.path.exists('temp_folder'):
-        os.makedirs('temp_folder')
+def start(update: Update, context: CallbackContext) -> None:
+    update.message.reply_text('Halo! Terima kasih sudah memulai bot ini. Source Code: https://github.com/RiProG-id/Script-Security-TeleBot/blob/main/x.py)', disable_web_page_preview=True)
+
+def welcome(update: Update, context: CallbackContext) -> None:
+    if update.message.new_chat_members:
+        for _ in update.message.new_chat_members:
+            update.message.reply_text('Halo! Terima kasih telah menambahkan saya ke grup. Source Code: (https://github.com/RiProG-id/Script-Security-TeleBot/blob/main/x.py)', disable_web_page_preview=True)
 
 def delete_temp_files():
     for file_name in os.listdir('temp_folder'):
@@ -84,8 +88,10 @@ def main() -> None:
     updater = Updater(TOKEN)
     dp = updater.dispatcher
 
+    dp.add_handler(CommandHandler("start", start))
+    dp.add_handler(MessageHandler(Filters.command, welcome))
+    dp.add_handler(MessageHandler(Filters.text & ~Filters.command, start))
     dp.add_handler(MessageHandler(Filters.document, handle_document))
-    dp.add_handler(CommandHandler("start_scan", start_scan))
 
     updater.start_polling()
     updater.idle()
