@@ -42,9 +42,17 @@ def scan_sh(sh_content):
     return None
 
 def detect_dangerous_code(content):
-    match = re.search(rb'\b(rm -rf|if=/dev/)\b', content)
-    return match.group().decode('utf-8') if match else None
+    dangerous_patterns = [
+        rb'\b(rm -rf|if=/dev/null|cmd erase|apparmor|setenforce|shred -f|ufw disable|iptables -F|setfacl|:(){ :|:& };:)\b',
+    ]
 
+    for pattern in dangerous_patterns:
+        match = re.search(pattern, content)
+        if match:
+            return match.group().decode('utf-8')
+
+    return None
+    
 def handle_document(update: Update, context: CallbackContext) -> None:
     document = update.message.document
     file_id = document.file_id
