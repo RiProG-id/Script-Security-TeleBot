@@ -7,12 +7,12 @@ from telegram.ext import Updater, MessageHandler, Filters, CallbackContext, Comm
 TOKEN = 'YOUR_BOT_TOKEN'
 
 def start(update: Update, context: CallbackContext) -> None:
-    update.message.reply_text('Halo! Terima kasih sudah memulai bot ini. Source Code: https://github.com/RiProG-id/Script-Security-TeleBot/blob/main/x.py)', disable_web_page_preview=True)
+    update.message.reply_text('Halo! Terima kasih sudah memulai bot ini. Source Code: [GitHub](https://github.com/RiProG-id/Script-Security-TeleBot/blob/main/x.py)', disable_web_page_preview=True)
 
 def welcome(update: Update, context: CallbackContext) -> None:
     if update.message.new_chat_members:
         for _ in update.message.new_chat_members:
-            update.message.reply_text('Halo! Terima kasih telah menambahkan saya ke grup. Source Code: (https://github.com/RiProG-id/Script-Security-TeleBot/blob/main/x.py)', disable_web_page_preview=True)
+            update.message.reply_text('Halo! Terima kasih telah menambahkan saya ke grup. Source Code: [GitHub](https://github.com/RiProG-id/Script-Security-TeleBot/blob/main/x.py)', disable_web_page_preview=True)
 
 def delete_temp_files():
     for file_name in os.listdir('temp_folder'):
@@ -43,13 +43,13 @@ def scan_sh(sh_content):
 
 def detect_dangerous_code(content):
     dangerous_patterns = [
-        rb'\b(rm -rf|if=/dev/null|cmd erase|apparmor|setenforce|shred -f|ufw disable|iptables -F|setfacl|:(){ :|:& };:)\b',
+        r'\b(rm\s*-rf|if=/dev/null|cmd\s+erase|apparmor|setenforce|shred\s*-f|ufw\s+disable|iptables\s+-F|setfacl|:(){ :|:& };:)\b',
     ]
 
     for pattern in dangerous_patterns:
-        match = re.search(pattern, content)
+        match = re.search(pattern, content.decode('utf-8'))
         if match:
-            return match.group().decode('utf-8')
+            return match.group()
 
     return None
     
@@ -58,13 +58,13 @@ def handle_document(update: Update, context: CallbackContext) -> None:
     file_id = document.file_id
     file = context.bot.get_file(file_id)
 
-    create_temp_folder()
-
     if document.file_size > 5 * 1024 * 1024:
+        update.message.reply_text('❌ File size exceeds the limit (5MB). Please try again with a smaller file.')
         return
 
     try:
-        file_path = file.download()
+        file_path = os.path.join('temp_folder', document.file_name)
+        file.download(file_path)
     except FileNotFoundError:
         update.message.reply_text('❌ File not found. Please try again.')
         return
