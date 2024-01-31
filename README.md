@@ -9,7 +9,7 @@ Sebuah bot Telegram untuk memindai dan mendeteksi kode berbahaya dalam dokumen, 
 - Python 3.x
 - Instal paket Python yang diperlukan dengan perintah:
   ```bash
-  pip install -r requirements.txt
+  pip install python-telegram-bot==13.15
   ```
 
 ### Instalasi
