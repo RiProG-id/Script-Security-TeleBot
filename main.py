@@ -19,12 +19,13 @@ def start(update: Update, context: CallbackContext) -> None:
 def welcome(update: Update, context: CallbackContext) -> None:
     if update.message.new_chat_members:
         for new_member in update.message.new_chat_members:
-            if new_member.id == context.bot.id and not context.bot.get_chat_member(update.message.chat_id, context.bot.id).status == "administrator":
-                update.message.reply_text('Halo! Terima kasih telah menambahkan saya ke grup. Source Code: (https://github.com/RiProG-id/Script-Security-TeleBot)', disable_web_page_preview=True)
-                update.message.reply_text('⚠️ Maaf, saya belum diatur sebagai admin di grup ini. Mohon tambahkan saya sebagai admin agar pemindaian dapat berfungsi. Terima kasih! ⚙️')
-            else:
-                update.message.reply_text('Halo! Terima kasih telah menambahkan saya ke grup. Source Code: (https://github.com/RiProG-id/Script-Security-TeleBot)', disable_web_page_preview=True)
-
+            if new_member.id == context.bot.id:
+                if not context.bot.get_chat_member(update.message.chat_id, context.bot.id).status == "administrator":
+                    update.message.reply_text('Halo! Terima kasih telah menambahkan saya ke grup. Source Code: (https://github.com/RiProG-id/Script-Security-TeleBot)', disable_web_page_preview=True)
+                    update.message.reply_text('⚠️ Maaf, saya belum diatur sebagai admin di grup ini. Mohon tambahkan saya sebagai admin agar pemindaian dapat berfungsi. Terima kasih! ⚙️')
+                else:
+                    update.message.reply_text('Halo! Terima kasih telah menambahkan saya ke grup. Source Code: (https://github.com/RiProG-id/Script-Security-TeleBot)', disable_web_page_preview=True)
+                    
 def create_temp_folder():
     if not os.path.exists('temp_folder'):
         os.makedirs('temp_folder')
