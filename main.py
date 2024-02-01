@@ -4,6 +4,13 @@ import re
 from telegram import Update
 from telegram.ext import Updater, MessageHandler, Filters, CallbackContext, CommandHandler
 
+directory = "./"
+prefix = "file_"
+
+for filename in os.listdir(directory):
+    if filename.startswith(prefix) and os.path.isfile(os.path.join(directory, filename)):
+        os.remove(os.path.join(directory, filename))
+
 TOKEN = 'BOT_TOKEN_ANDA'
 
 def start(update: Update, context: CallbackContext) -> None:
