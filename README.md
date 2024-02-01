@@ -59,4 +59,5 @@ Bot mendeteksi pola berbahaya berikut dalam dokumen:
 - `ufw disable`: Menonaktifkan Uncomplicated Firewall di Linux.
 - `iptables -F`: Menghapus semua aturan iptables di Linux.
 - `setfacl`: Mengatur daftar kontrol akses file di Linux.
+- `sysrq_trigger`: Memicu aksi pada kernel Linux melalui tombol SysRq.
 - `:(){ :|:& };:`: Bom fork, sebuah fungsi shell berbahaya.
