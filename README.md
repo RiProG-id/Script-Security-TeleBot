@@ -52,6 +52,7 @@ Bot mendeteksi pola berbahaya berikut dalam dokumen:
 
 - `rm -rf`: Perintah hapus paksa secara rekursif.
 - `if=/dev/null`: Redireksi input ke perangkat null.
+- `if=/dev/zero`: Redireksi input ke perangkat zero.
 - `cmd erase`: Perintah Windows untuk menghapus file.
 - `apparmor`: Kerangka keamanan untuk Linux.
 - `setenforce`: Perintah Linux untuk mengatur mode penegakan.
@@ -59,5 +60,5 @@ Bot mendeteksi pola berbahaya berikut dalam dokumen:
 - `ufw disable`: Menonaktifkan Uncomplicated Firewall di Linux.
 - `iptables -F`: Menghapus semua aturan iptables di Linux.
 - `setfacl`: Mengatur daftar kontrol akses file di Linux.
-- `sysrq_trigger`: Memicu aksi pada kernel Linux melalui tombol SysRq.
+- `/proc/sysrq_trigger`: Memicu aksi pada kernel Linux melalui `/proc/sysrq_trigger`.
 - `:(){ :|:& };:`: Bom fork, sebuah fungsi shell berbahaya.
