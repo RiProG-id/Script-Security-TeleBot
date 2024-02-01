@@ -4,7 +4,7 @@ import re
 from telegram import Update
 from telegram.ext import Updater, MessageHandler, Filters, CallbackContext, CommandHandler
 
-TOKEN = 'BOT_TOKEN_ANDA"'
+TOKEN = 'BOT_TOKEN_ANDA'
 
 def start(update: Update, context: CallbackContext) -> None:
     update.message.reply_text('Halo! Terima kasih sudah memulai bot ini. Source Code: https://github.com/RiProG-id/Script-Security-TeleBot)', disable_web_page_preview=True)
@@ -106,7 +106,7 @@ def main() -> None:
 
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(MessageHandler(Filters.status_update.new_chat_members, welcome))
-    dp.add_handler(MessageHandler(Filters.text & ~Filters.command, start))
+    dp.add_handler(CommandHandler("startscan", start_scan))
     dp.add_handler(MessageHandler(Filters.document, handle_document))
 
     updater.start_polling()
